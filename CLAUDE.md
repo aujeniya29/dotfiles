@@ -24,3 +24,7 @@ Voir `~/README.md` pour la documentation complète.
 - nvim relit le thème via autocmd `FocusGained`
 
 Sur WSL, wezterm utilise un stub Windows qui fait `dofile` vers le fichier WSL.
+
+## Git
+
+Ne jamais ajouter de `Co-Authored-By` dans les commits.

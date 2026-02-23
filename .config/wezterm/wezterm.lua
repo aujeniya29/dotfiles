@@ -71,6 +71,27 @@ config.colors = {
 	},
 }
 
+local fullscreen_apps = { nvim = true, vim = true, vi = true, tmux = true, htop = true, btop = true }
+
+wezterm.on("update-status", function(window, pane)
+	local process = pane:get_foreground_process_name()
+	local overrides = window:get_config_overrides() or {}
+	local no_padding = false
+
+	if process then
+		local name = process:match("([^/\\]+)$")
+		no_padding = fullscreen_apps[name] or false
+	end
+
+	if no_padding then
+		overrides.window_padding = { left = 0, right = 0, top = 0, bottom = 0 }
+	else
+		overrides.window_padding = nil
+	end
+
+	window:set_config_overrides(overrides)
+end)
+
 config.keys = {
 	{ key = "d", mods = "CTRL|SHIFT", action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
 	{ key = "e", mods = "CTRL|SHIFT", action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }) },
