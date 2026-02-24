@@ -27,6 +27,21 @@ export VISUAL="$EDITOR"
 # ── mise (gestionnaire de versions) ──────────────────────────
 eval "$(~/.local/bin/mise activate zsh 2>/dev/null)" || true
 
+# ── Starship : config runtime avec thème dynamique ─────────
+_update_starship_theme() {
+  local flavour runtime src
+  flavour=$(command cat ~/.config/theme 2>/dev/null || echo macchiato)
+  src="$HOME/.config/starship.toml"
+  runtime="$HOME/.cache/starship.toml"
+  if [[ ! -f "$runtime" ]] || [[ "$src" -nt "$runtime" ]] \
+     || ! grep -q "catppuccin_$flavour" "$runtime" 2>/dev/null; then
+    sed "s/palette = 'catppuccin_.*'/palette = 'catppuccin_$flavour'/" "$src" > "$runtime"
+  fi
+}
+export STARSHIP_CONFIG="$HOME/.cache/starship.toml"
+_update_starship_theme
+precmd_functions+=(_update_starship_theme)
+
 # ── Starship prompt ──────────────────────────────────────────
 eval "$(starship init zsh)"
 
@@ -50,7 +65,7 @@ unset _zsh_plugin_dir
 alias ls='eza --icons --group-directories-first'
 alias ll='eza -la --icons --group-directories-first'
 alias lt='eza -la --icons -TL2'
-alias cat='bat --style=plain --paging=never'
+alias cat='bat --style=plain --paging=never --theme=$BAT_THEME'
 alias grep='rg'
 alias find='fd'
 alias ..='cd ..'
@@ -104,6 +119,18 @@ docker-sync() {
 
   docker context ls
 }
+
+# ── bat : thème dynamique ──────────────────────────────────
+_update_bat_theme() {
+  local flavour
+  flavour=$(cat ~/.config/theme 2>/dev/null || echo macchiato)
+  case "$flavour" in
+    latte)     export BAT_THEME="Catppuccin Latte" ;;
+    *)         export BAT_THEME="Catppuccin Macchiato" ;;
+  esac
+}
+_update_bat_theme
+precmd_functions+=(_update_bat_theme)
 
 # ── fzf : configuration ─────────────────────────────────────
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'

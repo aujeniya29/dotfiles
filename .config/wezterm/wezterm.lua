@@ -6,21 +6,36 @@ local is_windows = wezterm.target_triple:find("windows") ~= nil
 -- ── Catppuccin palettes (tab bar) ─────────────────────────────
 local palettes = {
 	macchiato = {
-		base = "#24273a", mantle = "#1e2030", crust = "#181926",
-		surface0 = "#363a4f", surface1 = "#494d64",
-		text = "#cad3f5", subtext0 = "#a5adcb", blue = "#8aadf4",
+		base = "#24273a",
+		mantle = "#1e2030",
+		crust = "#181926",
+		surface0 = "#363a4f",
+		surface1 = "#494d64",
+		text = "#cad3f5",
+		subtext0 = "#a5adcb",
+		blue = "#8aadf4",
 	},
 	latte = {
-		base = "#eff1f5", mantle = "#e6e9ef", crust = "#dce0e8",
-		surface0 = "#ccd0da", surface1 = "#bcc0cc",
-		text = "#4c4f69", subtext0 = "#6c6f85", blue = "#1e66f5",
+		base = "#eff1f5",
+		mantle = "#e6e9ef",
+		crust = "#dce0e8",
+		surface0 = "#ccd0da",
+		surface1 = "#bcc0cc",
+		text = "#4c4f69",
+		subtext0 = "#6c6f85",
+		blue = "#1e66f5",
 	},
 }
 
 local function get_flavour()
 	if is_windows then
 		local ok, stdout = wezterm.run_child_process({
-			"wsl.exe", "-d", "Ubuntu-24.04", "--", "cat", "/home/paugam/.config/theme",
+			"wsl.exe",
+			"-d",
+			"Ubuntu-24.04",
+			"--",
+			"cat",
+			"/home/paugam/.config/theme",
 		})
 		if ok then
 			return stdout:gsub("%s+", "")
@@ -52,7 +67,7 @@ config.window_padding = { left = 8, right = 8, top = 8, bottom = 8 }
 config.hide_tab_bar_if_only_one_tab = true
 
 if is_windows then
-	config.front_end = "OpenGL"
+	config.front_end = "Software"
 end
 
 config.window_frame = {
@@ -121,7 +136,11 @@ config.keys = {
 		action = wezterm.action_callback(function(win, pane)
 			if is_windows then
 				wezterm.run_child_process({
-					"wsl.exe", "-d", "Ubuntu-24.04", "--", "/home/paugam/.local/bin/theme-toggle",
+					"wsl.exe",
+					"-d",
+					"Ubuntu-24.04",
+					"--",
+					"/home/paugam/.local/bin/theme-toggle",
 				})
 			else
 				wezterm.run_child_process({ os.getenv("HOME") .. "/.local/bin/theme-toggle" })
