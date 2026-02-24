@@ -1,0 +1,10 @@
+#!/bin/bash
+(git --git-dir="$HOME/.dotfiles" --work-tree="$HOME" fetch 2>/dev/null &)
+dirty=$(git --git-dir="$HOME/.dotfiles" --work-tree="$HOME" status --porcelain 2>/dev/null | head -1)
+ahead=$(git --git-dir="$HOME/.dotfiles" --work-tree="$HOME" rev-list @{u}..HEAD --count 2>/dev/null)
+behind=$(git --git-dir="$HOME/.dotfiles" --work-tree="$HOME" rev-list HEAD..@{u} --count 2>/dev/null)
+msgs=""
+[ -n "$dirty" ] && msgs="${msgs}changements non commités\n"
+[ "${ahead:-0}" -gt 0 ] 2>/dev/null && msgs="${msgs}${ahead} commit(s) à push\n"
+[ "${behind:-0}" -gt 0 ] 2>/dev/null && msgs="${msgs}${behind} commit(s) à pull\n"
+if [ -n "$msgs" ]; then printf "%b" "$msgs"; else echo "tout est propre"; fi

@@ -87,9 +87,30 @@ config.colors = {
 	},
 }
 
+-- ── Dotfiles status check ────────────────────────────────────
+local dot_status = (function()
+	local cmd
+	if is_windows then
+		cmd = { "wsl.exe", "-d", "Ubuntu-24.04", "--", "bash", "-c", "~/.local/bin/dot-status" }
+	else
+		cmd = { os.getenv("HOME") .. "/.local/bin/dot-status" }
+	end
+	local ok, stdout = wezterm.run_child_process(cmd)
+	if ok and stdout and stdout:match("%S") then
+		return stdout:gsub("^%s+", ""):gsub("%s+$", "")
+	end
+	return "tout est propre"
+end)()
+
+local dot_notified = false
+
 local fullscreen_apps = { nvim = true, vim = true, vi = true, tmux = true, htop = true, btop = true }
 
 wezterm.on("update-status", function(window, pane)
+	if not dot_notified and dot_status then
+		dot_notified = true
+		window:toast_notification("dotfiles", dot_status, nil, 5000)
+	end
 	local process = pane:get_foreground_process_name()
 	local overrides = window:get_config_overrides() or {}
 	local no_padding = false
