@@ -69,6 +69,7 @@ config.hide_tab_bar_if_only_one_tab = true
 
 if is_windows then
 	config.front_end = "Software"
+	config.allow_win32_input_mode = false
 end
 
 config.window_frame = {
