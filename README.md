@@ -92,7 +92,7 @@ bat cache --build
 ## Installation
 
 ```bash
-git clone --bare https://github.com/PierreLouisPAUGAM/dotfiles.git ~/.dotfiles
+git clone --bare https://github.com/aujeniya29/dotfiles.git ~/.dotfiles
 alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 dot config status.showUntrackedFiles no
 dot checkout
