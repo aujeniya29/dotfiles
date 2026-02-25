@@ -133,6 +133,7 @@ format = '[[ $symbol( $version)(\(#$virtualenv\)) ](fg:crust bg:green)]($style)'
 symbol = "󰡨"
 style = "bg:sapphire"
 format = '[[ $symbol( $context) ](fg:crust bg:sapphire)]($style)'
+only_with_files = false
 
 [conda]
 symbol = "󰏓 "
