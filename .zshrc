@@ -117,6 +117,11 @@ alias path='echo $PATH | tr ":" "\n"'
 alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 capi() { curl -s "$@" | jq .; }
 
+autoload -Uz compinit && compinit
+eval "$(register-python-argcomplete ansible)"
+eval "$(register-python-argcomplete ansible-playbook)"
+eval "$(register-python-argcomplete ansible-doc)"
+
 # ── Docker contexts auto (depuis ~/.ssh/config # docker) ────
 docker-sync() {
   local ssh_hosts=""
@@ -179,3 +184,4 @@ if [[ "$(uname)" == "Linux" ]]; then
   }
   precmd_functions+=(_sync_wezterm)
 fi
+export MISE_TRUSTED_CONFIG_PATHS="$HOME/.local/share/dsoxlab"
