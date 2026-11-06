@@ -39,6 +39,12 @@ export VISUAL="$EDITOR"
 # ── mise (gestionnaire de versions) ──────────────────────────
 eval "$(~/.local/bin/mise activate zsh 2>/dev/null)" || true
 
+# ── Proxy d'entreprise : certificat de confiance pour Node ──
+# ~/.config/corp-ca.crt : fichier local non versionné (lien vers le certificat du proxy)
+if [[ -f "$HOME/.config/corp-ca.crt" ]]; then
+  export NODE_EXTRA_CA_CERTS="$HOME/.config/corp-ca.crt"
+fi
+
 # ── Starship : config runtime avec thème dynamique ─────────
 _update_starship_theme() {
   local flavour runtime src
