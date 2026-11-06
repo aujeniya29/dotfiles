@@ -201,6 +201,28 @@ Remplacer `<WIN-USER>` par le nom d'utilisateur Windows (`echo $(/mnt/c/Windows/
 
 </details>
 
+<details>
+<summary><strong>Poste d'entreprise — certificat du proxy pour Node</strong></summary>
+
+Derrière un proxy d'entreprise qui inspecte le HTTPS, Node rejette le certificat du proxy (`SELF_SIGNED_CERT_IN_CHAIN`, ou `Exit handler never called!` pendant `npm install`).
+
+Le `.zshrc` exporte `NODE_EXTRA_CA_CERTS` si le fichier `~/.config/corp-ca.crt` existe. Ce fichier n'est pas versionné : il suffit de créer un lien vers le certificat du proxy, déjà installé dans le système par l'entreprise :
+
+```bash
+ls /usr/local/share/ca-certificates/      # repérer le certificat du proxy
+ln -s /usr/local/share/ca-certificates/<certificat>.crt ~/.config/corp-ca.crt
+```
+
+Vérification (dans un nouveau terminal) :
+
+```bash
+node -e "fetch('https://registry.npmjs.org').then(r => console.log(r.status))"   # doit afficher 200
+```
+
+Sans ce lien (poste personnel, macOS), le bloc n'a aucun effet.
+
+</details>
+
 **macOS** — rien de spécial, tout fonctionne directement après le clone.
 
 ## Usage quotidien
@@ -270,6 +292,7 @@ Le fichier `~/.config/theme` (non traqué) contient le flavour actif et sert de 
 | ------------------------ | --------------------------------------------- |
 | `~/.config/theme`        | Flavour actif (`macchiato` ou `latte`)        |
 | `~/.cache/starship.toml` | Config starship générée avec la bonne palette |
+| `~/.config/corp-ca.crt`  | Lien vers le certificat du proxy d'entreprise (optionnel) |
 
 </details>
 
